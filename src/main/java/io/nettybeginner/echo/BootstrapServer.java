@@ -6,10 +6,19 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.nettybeginner.echo.pipeline.EchoChannelInitializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BootstrapServer {
 
+    private static final Logger log = LoggerFactory.getLogger(BootstrapServer.class);
+
     public static void main(String[] args) throws Exception {
+
+        log.info(
+                "Available processors: {}",
+                Runtime.getRuntime().availableProcessors()
+        );
 
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -23,7 +32,7 @@ public class BootstrapServer {
 
             ChannelFuture future = bootstrap.bind(8080).sync();
 
-            System.out.println("Server listening on port 8080");
+            log.info("Server listening on port 8080");
 
             future.channel().closeFuture().sync();
         } finally {

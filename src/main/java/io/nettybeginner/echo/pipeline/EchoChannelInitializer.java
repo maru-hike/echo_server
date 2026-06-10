@@ -2,6 +2,7 @@ package io.nettybeginner.echo.pipeline;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
+import io.nettybeginner.echo.BootstrapServer;
 import io.nettybeginner.echo.handler.EchoServerHandler;
 
 import io.netty.handler.codec.LineBasedFrameDecoder;
@@ -15,7 +16,6 @@ public class EchoChannelInitializer
 
     @Override
     protected void initChannel(SocketChannel ch) {
-        System.out.println("New channel initialized: " + ch.id());
         ch.pipeline()
                 .addLast(new LineBasedFrameDecoder(1024))
                 .addLast(new StringDecoder(StandardCharsets.UTF_8))
