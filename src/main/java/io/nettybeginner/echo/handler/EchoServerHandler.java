@@ -8,7 +8,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import java.nio.charset.StandardCharsets;
 
 public class EchoServerHandler
-    extends SimpleChannelInboundHandler<ByteBuf> {
+    extends SimpleChannelInboundHandler<String> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx){
@@ -19,15 +19,36 @@ public class EchoServerHandler
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg){
-
-        String received =
-                msg.toString(StandardCharsets.UTF_8);
+    public void channelRead0(ChannelHandlerContext ctx, String msg){
 
         System.out.println(
-                "Received: " + received
+                "Received: " + msg
         );
 
-        ctx.writeAndFlush(msg);
+        ctx.writeAndFlush(msg + "\n");
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+
+        System.out.println(
+                "Client disconnected: "
+                        + ctx.channel().id()
+        );
+    }
+
+    @Override
+    public void exceptionCaught(
+            ChannelHandlerContext ctx,
+            Throwable cause) {
+
+        System.err.println(
+                "Connection error: "
+                        + ctx.channel().id()
+        );
+
+        cause.printStackTrace();
+
+        ctx.close();
     }
 }
