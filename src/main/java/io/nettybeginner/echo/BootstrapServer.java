@@ -1,6 +1,7 @@
 package io.nettybeginner.echo;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -34,7 +35,17 @@ public class BootstrapServer {
 
             log.info("Server listening on port 8080");
 
-            future.channel().closeFuture().sync();
+            Channel serverChannel = future.channel();
+            Runtime.getRuntime().addShutdownHook(
+                    new Thread(() -> {
+
+                        log.info("Shutdown requested");
+
+                        serverChannel.close();
+
+                    })
+            );
+            serverChannel.closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

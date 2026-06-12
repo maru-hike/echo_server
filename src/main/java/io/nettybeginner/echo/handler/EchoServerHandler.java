@@ -23,7 +23,7 @@ public class EchoServerHandler
     @Override
     public void channelActive(ChannelHandlerContext ctx){
        log.info(
-                "Client connected: {}"
+                "[{}] Client connected"
                 , ctx.channel().id()
         );
     }
@@ -53,7 +53,7 @@ public class EchoServerHandler
     public void channelInactive(ChannelHandlerContext ctx) {
 
         log.info(
-                "Client disconnected: {}"
+                "[{}] Client disconnected"
                         , ctx.channel().id()
         );
     }
@@ -69,5 +69,31 @@ public class EchoServerHandler
         );
 
         ctx.close();
+    }
+
+    @Override
+    public void channelRegistered(
+            ChannelHandlerContext ctx)
+            throws Exception {
+
+        log.info(
+                "[{}] channelRegistered",
+                ctx.channel().id()
+        );
+
+        super.channelRegistered(ctx);
+    }
+
+    @Override
+    public void channelUnregistered(
+            ChannelHandlerContext ctx)
+            throws Exception {
+
+        log.info(
+                "[{}] channelUnregistered",
+                ctx.channel().id()
+        );
+
+        super.channelUnregistered(ctx);
     }
 }
